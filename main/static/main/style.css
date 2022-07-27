@@ -204,6 +204,7 @@
   background:url(../../assets/img/screen-content-iphone-6.jpg);
   background-size:cover;
   background-position:center;
+  display: none;
 }
 
 .header-blue .iphone-mockup .screen:before {
