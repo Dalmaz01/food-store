@@ -53,3 +53,16 @@ hr {
 .divider {
     border-top: 2px solid
 }
+#a {
+    text-decoration: none;
+    color: #C5CAE9;
+}
+
+.footer_list {
+
+
+}
+
+.footer_list:hover {
+    color: #957BDA;
+}
