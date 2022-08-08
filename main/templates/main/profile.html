@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>ФИО: {{ user.last_name }} {{ user.first_name }}</h2>
+            <p>Почта: {{ user.email }}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 mx-auto">
+            <form method="post">
+            {% if error %}
+                <p class="text-danger">{{ error.message }}</p>
+            {% endif %}
+            {% csrf_token %}
+                <input type="text" id="password" class="fadeIn third password" name="password" placeholder="password" >
+                <input type="text" id="password" class="fadeIn third password" name="last_name" placeholder="Last Name" >
+                <input type="text" id="password" class="fadeIn third password" name="first_name" placeholder="First Name" >
+                <input type="submit" class="fadeIn fourth" value="Изменить данные">
+            </form>
+        </div>
+    </div>
+
+    
+    <div class="row">
+        <div class="col-sm-12 mx-auto">
+            <a href="{% url 'main:delete_profile' %}">Удалить страницу</a>
+        </div>
+    </div>
+
+{% endblock %}

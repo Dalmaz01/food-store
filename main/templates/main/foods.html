@@ -29,7 +29,7 @@
 
                                 <div class="media-body">
                                     <h6 class="media-title font-weight-semibold">
-                                        <a href="#" data-abc="true" style="color:#FFC107;">{{ food.name }}</a>
+                                        <a href="{% url 'main:food_detail_page' food.pk %}" data-abc="true" style="color:#FFC107;">{{ food.name }}</a>
                                     </h6>
 
                                     <ul class="list-inline list-inline-dotted mb-3 mb-lg-2">

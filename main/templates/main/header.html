@@ -13,9 +13,18 @@
                                 <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation" href="#">First Item</a><a class="dropdown-item" role="presentation" href="#">Second Item</a><a class="dropdown-item" role="presentation" href="#">Third Item</a></div>
                             </li>
                         </ul>
-                        <form class="form-inline mr-auto" target="_self">
+                        <form method="get" action="{% url 'main:results_page' %}" class="form-inline mr-auto" target="_self">
                             <div class="form-group"><label for="search-field"><i class="fa fa-search"></i></label><input class="form-control search-field" type="search" name="search" id="search-field"></div>
-                        </form><span class="navbar-text"> <a href="{% url 'main:login_page' %}" class="login">Log In</a></span><a class="btn btn-light action-button" role="button" href="#">Sign Up</a></div>
+                        </form>
+                        {% if user.is_authenticated %}
+                            <span class="navbar-text"> <a href="{% url 'main:profile_page' %}" class="login">Profile</a></span>
+                            <a class="btn btn-light action-button" role="button" href="{% url 'main:logout_view' %}">Log Out</a></div>
+                        {% else %}
+                            <span class="navbar-text"> <a href="{% url 'main:login_page' %}" class="login">Log In</a></span>
+                            <a class="btn btn-light action-button" role="button" href="{% url 'main:register_page' %}">Sign Up</a></div>
+                        {% endif %}
+
+
                 </div>
             </nav>
             <div class="container hero">

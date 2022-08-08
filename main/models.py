@@ -27,6 +27,14 @@ class Foods(models.Model):
         return self.name
 
 
+class Comment(models.Model):
+    author = models.CharField(max_length=30, verbose_name='Автор комментария')
+    comment_text = models.TextField(verbose_name='Текст комментария')
+    created_date = models.DateField(auto_now_add=True, verbose_name='Дата создания комментария')
+    food = models.ForeignKey(Foods, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.author}: {self.created_date} - {self.food}"
 # class Wishlist(models.Model):
 #     food = models.ManyToManyField
 #     count = models.IntegerField(default=0, verbose_name='Количество продукта')
