@@ -1,0 +1,38 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %} Index page title {% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-6">
+            <img src="{{MEDIA_URL}}{{ food.image }}" style="width: 100%;">
+        </div>
+        <div class="col-sm-6">
+            <h2>{{ food.name }}</h2>
+            <p>{{ food.description }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <form method="post">
+                {% csrf_token %}
+                <input type="text" name="author" placeholder="Автор">
+                <input type="text" name="comment" placeholder="Текст комментария">
+                <input type="submit" value="Отправить комментарий">
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <ul>
+                {% for comment in comments %}
+                    <li>{{comment.author}}: {{comment.created_date}}<br>
+                    {{comment.comment_text}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
