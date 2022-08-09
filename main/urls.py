@@ -13,4 +13,8 @@ urlpatterns = [
     path('profile/delete', views.profile_delete_view, name='delete_profile'),
     path('logout', views.logout_view, name='logout_view'),
     path('register', views.register_page, name='register_page'),
+    path('contact_us', views.contact_us_page, name='contact_us_page'),
+    path('history', views.history_page, name='history_page'),
+    path('career', views.career_page, name='career_page'),
+    path('business', views.business_page, name='business_page'),
 ]

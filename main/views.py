@@ -169,3 +169,19 @@ def profile_delete_view(request):
 
     # Если пользователь не аутентифицирован, перенаправить на страницу логина
     return redirect(reverse('main:login_page'))
+
+
+def contact_us_page(request):
+    return render(request, 'main/contact_us.html', {})
+
+
+def history_page(request):
+    return render(request, 'main/history.html', {})
+
+
+def career_page(request):
+    return render(request, 'main/career.html', {})
+
+
+def business_page(request):
+    return render(request, 'main/business.html', {})

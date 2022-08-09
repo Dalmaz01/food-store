@@ -18,25 +18,30 @@
             <div class="col-md-2 col-sm-2 col-xs-2">
                 <h5 class="heading">Информация</h5>
                 <ul>
-                    <li>История</li>
-                    <li>Меню</li>
-                    <li>Рестораны</li>
+                    <a href="{% url 'main:history_page' %}"><li>История</li></a>
+                    <a href="{% url 'main:foods_page' %}"><li>Меню</li></a>
                 </ul>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-2">
                 <h5 class="heading">Нужна помощь?</h5>
                 <ul class="card-text">
-                    <li>Связаться с нами</li>
-                    <li>Карьера в TFood</li>
-                    <li>Бизнес с TFood</li>
+                    <a href="{% url 'main:contact_us_page' %}"><li>Связаться с нами</li></a>
+                    <a href="{% url 'main:career_page' %}"><li>Карьера в TFood</li></a>
+                    <a href="{% url 'main:business_page' %}"><li>Бизнес с TFood</li></a>
                 </ul>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-2">
                 <h5 class="heading">Аккаунт</h5>
                 <ul class="card-text">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'main:profile_page' %}"><li>Профиль</li></a>
+                    {% else %}
                     <li><a class="footer_list" href="{% url 'main:login_page' %}">Войти</a></li>
-                    <li>Регистрация</li>
+                    <a href="{% url 'main:register_page' %}"><li>Регистрация</li></a>
                     <li>Забыл пароль</li>
+                    {% endif %}
+
+
                 </ul>
             </div>
         </div>

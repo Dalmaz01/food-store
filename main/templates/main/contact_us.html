@@ -1,0 +1,20 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block link %}
+<link rel="stylesheet" href="{% static 'main/food_detail.css' %}">
+{% endblock %}
+{% block body %}
+    <h3>Связь с нами!</h3>
+    <form method="post">
+                {% csrf_token %}
+                <input type="text" placeholder="Имя" name="first_name" class="form-control w-50">
+                <input type="text" placeholder="Фамилия" name="last_name" class="form-control w-50">
+                <input type="text" placeholder="Номер телефона" name="phone_number" class="form-control w-50">
+                <input type="text" placeholder="Адрес электронной почты" name="email" class="form-control w-50">
+                <input type="text" name="message" placeholder="Сообщение" class="form-control w-50">
+                <input type="submit" value="Отправить" class="btn btn-primary">
+            </form>
+{% endblock %}
