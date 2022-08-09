@@ -14,7 +14,14 @@ def foods_page(request):
         'all_foods': all_foods,
 
     }
-    return render(request, 'main/foods.html', context)
+    if request.method == "GET":
+        return render(request, 'main/foods.html', context)
+    else:
+        food = request.POST.get("food")
+        # models.Basket.objects.create(
+        #     food=food
+        # )
+        return redirect(reverse('main:foods_page'))
 
 
 def login_page(request):
@@ -50,18 +57,33 @@ def results_page(request):
 
 def food_detail_page(request, pk):
     food = models.Foods.objects.get(pk=pk)
+
     comments = models.Comment.objects.filter(food=food)
 
     if request.method == "GET":
         return render(request, 'main/food_detail.html', {'food':food, 'comments':comments})
     else:
-        author = request.POST.get("author", None)
-        comment_text = request.POST.get("comment", None)
-        models.Comment.objects.create(
-            author=author,
-            comment_text=comment_text,
+        f_name = request.POST.get("first_name")
+        l_name = request.POST.get("last_name")
+        p_number = request.POST.get("phone_number")
+        address = request.POST.get("address")
+        f_count = request.POST.get("food_count")
+        models.Orders.objects.create(
             food=food,
+            first_name=f_name,
+            last_name=l_name,
+            phone_number=p_number,
+            address=address,
+            food_count=f_count,
+
         )
+        # author = request.POST.get("author", None)
+        # comment_text = request.POST.get("comment", None)
+        # models.Comment.objects.create(
+        #     author=author,
+        #     comment_text=comment_text,
+        #     food=food,
+        # )
         return redirect(reverse('main:food_detail_page', args=(pk,)))
 
 

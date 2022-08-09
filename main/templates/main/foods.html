@@ -50,8 +50,10 @@
 
 
                                     </div>
+                                    <a href="{% url 'main:food_detail_page' food.pk %}">
+                                        <button type="button" class="btn btn-warning mt-4 text-white " name="add_to_cart"><i class="icon-cart-add mr-2"></i> Заказать</button>
+                                    </a>
 
-                                    <button type="button" class="btn btn-warning mt-4 text-white "><i class="icon-cart-add mr-2"></i> Add to cart</button>
                                 </div>
                             </div>
                         </div>

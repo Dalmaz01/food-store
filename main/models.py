@@ -35,11 +35,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.author}: {self.created_date} - {self.food}"
-# class Wishlist(models.Model):
-#     food = models.ManyToManyField
-#     count = models.IntegerField(default=0, verbose_name='Количество продукта')
 
-# class Orders(models.Model):
-#     food = models.ManyToManyField(Foods)
-#     date_time = models.DateTimeField(auto_now_add=True)
-#     count = models.IntegerField()
+
+class Orders(models.Model):
+    food = models.ForeignKey(Foods, on_delete=models.CASCADE, default=None, null=None)
+    first_name = models.CharField(max_length=30, verbose_name='Имя')
+    last_name = models.CharField(max_length=30, verbose_name='Фамилия')
+    phone_number = models.IntegerField(verbose_name='Номер телефона')
+    address = models.CharField(max_length=150, verbose_name='Адрес')
+    food_count = models.IntegerField(verbose_name='Кол-во', default=None, null=None)
+    price = models.IntegerField(verbose_name='Сумма', default=None, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.food}: {self.first_name} {self.last_name}"

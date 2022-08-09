@@ -3,6 +3,10 @@
 
 {% block title %} Index page title {% endblock %}
 
+{% block link %}
+<link rel="stylesheet" href="{% static 'main/food_detail.css' %}">
+{% endblock %}
+
 {% block body %}
     <div class="row">
         <div class="col-sm-6">
@@ -11,24 +15,37 @@
         <div class="col-sm-6">
             <h2>{{ food.name }}</h2>
             <p>{{ food.description }}</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
+            <h2>{{ food.price }} Тг.</h2>
             <form method="post">
                 {% csrf_token %}
-                <input type="text" name="author" placeholder="Автор">
-                <input type="text" name="comment" placeholder="Текст комментария">
-                <input type="submit" value="Отправить комментарий">
+                <input type="text" placeholder="Имя" name="first_name" class="form-control w-50">
+                <input type="text" placeholder="Фамилия" name="last_name" class="form-control w-50">
+                <input type="text" placeholder="Номер телефона" name="phone_number" class="form-control w-50">
+                <input type="text" placeholder="Адрес" name="address" class="form-control w-50">
+                <input type="number" name="food_count" placeholder="кол-во" class="form-control w-50">
+                <input type="submit" value="Заказать" class="btn btn-primary">
             </form>
+
         </div>
     </div>
+
+    <h3>Комментарии:</h3>
+<!--    <div class="row">-->
+<!--        <div class="col-sm-12">-->
+<!--            <form method="post">-->
+<!--                {% csrf_token %}-->
+<!--                <input type="text" name="author" placeholder="Автор">-->
+<!--                <input type="text" name="comment" placeholder="Текст комментария">-->
+<!--                <input type="submit" value="Отправить комментарий">-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
 
     <div class="row">
         <div class="col-sm-12">
             <ul>
                 {% for comment in comments %}
-                    <li>{{comment.author}}: {{comment.created_date}}<br>
+                    <li style="color: black;">{{comment.author}}: {{comment.created_date}}<br>
                     {{comment.comment_text}}</li>
                 {% endfor %}
             </ul>
