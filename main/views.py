@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 def foods_page(request):
     all_foods = models.Foods.objects.all()
 
+
+
     context = {
         'all_foods': all_foods,
 
