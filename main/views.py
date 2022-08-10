@@ -3,6 +3,7 @@ from django.urls import reverse
 from . import models
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 
 
 def foods_page(request):
@@ -172,7 +173,22 @@ def profile_delete_view(request):
 
 
 def contact_us_page(request):
-    return render(request, 'main/contact_us.html', {})
+    if request.method == "GET":
+        return render(request, 'main/contact_us.html', {})
+    else:
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        phone_number = request.POST.get("phone_number")
+        email = request.POST.get("email")
+        message = request.POST.get("message")
+        models.Questions.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            phone_number=phone_number,
+            email=email,
+            message=message
+        )
+        return redirect(reverse('main:contact_us_page'))
 
 
 def history_page(request):
@@ -180,7 +196,22 @@ def history_page(request):
 
 
 def career_page(request):
-    return render(request, 'main/career.html', {})
+    if request.method == "GET":
+        return render(request, 'main/career.html', {})
+    else:
+        full_name = request.POST.get("full_name")
+        email = request.POST.get("email")
+        stuff = request.POST.get("stuff")
+        resume = request.POST.get("resume")
+        message = request.POST.get("message")
+        models.Career.objects.create(
+            full_name=full_name,
+            email=email,
+            stuff=stuff,
+            resume=resume,
+            message=message
+        )
+        return redirect(reverse('main:career_page'))
 
 
 def business_page(request):

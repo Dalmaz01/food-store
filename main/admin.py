@@ -4,7 +4,9 @@ from .models import(
     Ratings,
     Foods,
     Comment,
-    Orders
+    Orders,
+    Questions,
+    Career
 )
 
 admin.site.register(Category)
@@ -12,3 +14,5 @@ admin.site.register(Ratings)
 admin.site.register(Foods)
 admin.site.register(Comment)
 admin.site.register(Orders)
+admin.site.register(Questions)
+admin.site.register(Career)

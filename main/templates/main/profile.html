@@ -2,6 +2,10 @@
 {% load static %}
 {% block title %}{% endblock %}
 
+{% block link %}
+<link rel="stylesheet" href="{% static 'main/food_detail.css' %}">
+{% endblock %}
+
 {% block body %}
     <div class="row">
         <div class="col-sm-12">
@@ -17,10 +21,10 @@
                 <p class="text-danger">{{ error.message }}</p>
             {% endif %}
             {% csrf_token %}
-                <input type="text" id="password" class="fadeIn third password" name="password" placeholder="password" >
-                <input type="text" id="password" class="fadeIn third password" name="last_name" placeholder="Last Name" >
-                <input type="text" id="password" class="fadeIn third password" name="first_name" placeholder="First Name" >
-                <input type="submit" class="fadeIn fourth" value="Изменить данные">
+                <input type="text" class="form-control w-25" name="password" placeholder="password" >
+                <input type="text" class="form-control w-25" name="last_name" placeholder="Last Name" >
+                <input type="text" class="form-control w-25" name="first_name" placeholder="First Name" >
+                <input type="submit" class="btn btn-primary" value="Изменить данные">
             </form>
         </div>
     </div>
@@ -28,7 +32,7 @@
     
     <div class="row">
         <div class="col-sm-12 mx-auto">
-            <a href="{% url 'main:delete_profile' %}">Удалить страницу</a>
+            <a href="{% url 'main:delete_profile' %}" style="color: red">Удалить страницу</a>
         </div>
     </div>
 
