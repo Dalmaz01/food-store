@@ -59,6 +59,9 @@ def results_page(request):
 def food_detail_page(request, pk):
     food = models.Foods.objects.get(pk=pk)
 
+    food_price = food.price
+    print(food_price)
+
     comments = models.Comment.objects.filter(food=food)
 
     if request.method == "GET":
@@ -69,6 +72,7 @@ def food_detail_page(request, pk):
         p_number = request.POST.get("phone_number")
         address = request.POST.get("address")
         f_count = request.POST.get("food_count")
+        print(food_price * int(f_count))
         models.Orders.objects.create(
             food=food,
             first_name=f_name,
@@ -76,7 +80,7 @@ def food_detail_page(request, pk):
             phone_number=p_number,
             address=address,
             food_count=f_count,
-
+            price=food_price * int(f_count)
         )
         # author = request.POST.get("author", None)
         # comment_text = request.POST.get("comment", None)
