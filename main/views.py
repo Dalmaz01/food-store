@@ -3,7 +3,7 @@ from django.urls import reverse
 from . import models
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
+from django.core.files.storage import FileSystemStorage
 
 
 def foods_page(request):
@@ -90,6 +90,21 @@ def food_detail_page(request, pk):
         #     food=food,
         # )
         return redirect(reverse('main:food_detail_page', args=(pk,)))
+
+
+def add_comment_view(request,pk):
+    if request.user.is_authenticated:
+        author = request.user.username
+    else:
+        author = request.POST.get("author", None)
+    food = models.Foods.objects.get(pk=pk)
+    comment_text = request.POST.get("comment", None)
+    models.Comment.objects.create(
+        author=author,
+        comment_text=comment_text,
+        food=food,
+    )
+    return redirect(reverse('main:food_detail_page', args=(pk,)))
 
 
 def profile_page(request):
@@ -206,13 +221,11 @@ def career_page(request):
         full_name = request.POST.get("full_name")
         email = request.POST.get("email")
         stuff = request.POST.get("stuff")
-        resume = request.POST.get("resume")
         message = request.POST.get("message")
         models.Career.objects.create(
             full_name=full_name,
             email=email,
             stuff=stuff,
-            resume=resume,
             message=message
         )
         return redirect(reverse('main:career_page'))

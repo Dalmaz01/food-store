@@ -17,4 +17,5 @@ urlpatterns = [
     path('history', views.history_page, name='history_page'),
     path('career', views.career_page, name='career_page'),
     path('business', views.business_page, name='business_page'),
+    path('add_comment/<int:pk>', views.add_comment_view, name='add_comment'),
 ]

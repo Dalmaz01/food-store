@@ -16,7 +16,7 @@
             <h2>{{ food.name }}</h2>
             <p>{{ food.description }}</p>
             <h2>{{ food.price }} Тг.</h2>
-            <form method="post">
+            <form method="post" name="order">
                 {% csrf_token %}
                 <input type="text" placeholder="Имя" name="first_name" class="form-control w-50">
                 <input type="text" placeholder="Фамилия" name="last_name" class="form-control w-50">
@@ -30,16 +30,20 @@
     </div>
 
     <h3>Комментарии:</h3>
-<!--    <div class="row">-->
-<!--        <div class="col-sm-12">-->
-<!--            <form method="post">-->
-<!--                {% csrf_token %}-->
-<!--                <input type="text" name="author" placeholder="Автор">-->
-<!--                <input type="text" name="comment" placeholder="Текст комментария">-->
-<!--                <input type="submit" value="Отправить комментарий">-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div class="row">
+        <div class="col-sm-12">
+            <form method="post" action="{% url 'main:add_comment' food.pk %}">
+                {% csrf_token %}
+                {% if user.is_authenticated %}
+                <input type="text" name="comment" placeholder="Текст комментария">
+                {% else %}
+                <input type="text" name="author" placeholder="Автор">
+                <input type="text" name="comment" placeholder="Текст комментария">
+                {% endif %}
+                <input type="submit" value="Отправить комментарий">
+            </form>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-sm-12">
