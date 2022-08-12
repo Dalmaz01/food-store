@@ -29,7 +29,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'dalmaz01.pythonanywhere.com/',
+    'dalmaz01.pythonanywhere.com',
 ]
 
 
