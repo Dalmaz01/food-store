@@ -8,11 +8,7 @@ class Category(models.Model):
         return self.name
 
 
-class Ratings(models.Model):
-    number = models.IntegerField(default=0, verbose_name='Звезды рейтинга')
 
-    def __str__(self):
-        return f"{self.number} star"
 
 
 class Foods(models.Model):
@@ -20,7 +16,6 @@ class Foods(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.IntegerField(default=0, verbose_name='Цена еды')
     description = models.TextField(verbose_name='Описание')
-    rating = models.ForeignKey(Ratings, on_delete=models.PROTECT)
     image = models.ImageField(verbose_name='Фотография продукта', default=None, null=None)
 
     def __str__(self):
