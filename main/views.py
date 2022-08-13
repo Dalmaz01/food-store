@@ -3,76 +3,132 @@ from django.urls import reverse
 from . import models
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.core.files.storage import FileSystemStorage
 
 
-def foods_page(request):
-    all_foods = models.Foods.objects.all()
-
-
-
-    context = {
-        'all_foods': all_foods,
-
-    }
-    if request.method == "GET":
-        return render(request, 'main/foods.html', context)
-    else:
-        food = request.POST.get("food")
-        # models.Basket.objects.create(
-        #     food=food
-        # )
-        return redirect(reverse('main:foods_page'))
-
-
-def login_page(request):
-    if request.method == "POST":
-        username = request.POST.get("login", None)
-        password = request.POST.get("password", None)
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            return redirect(reverse("main:profile_page"))
-
-        return render(request, "main/login.html", {"error": "Неправильный логин или пароль"})
-    return render(request, "main/login.html", {})
-
-
+# Отображение главной страницы
 def home_page(request):
     return render(request, 'main/home.html', {})
 
 
+# Отображение страницы со всеми продуктами
+def foods_page(request):
+    all_foods = models.Foods.objects.all()
+
+    context = {
+        'all_foods': all_foods,
+    }
+    return render(request, 'main/foods.html', context)
+
+
+def register_page(request):
+    '''
+    Контроллер, отвечающий за логику:
+    - отображения страницы регистрации
+    - регистрации пользователя
+    '''
+    if request.method == "POST":
+        # Регистрация пользователя при POST запросе
+        try:
+            username = request.POST.get("login", None)
+            password = request.POST.get("password", None)
+            email = request.POST.get("email", None)
+            first_name = request.POST.get("first_name", None)
+            last_name = request.POST.get("last_name", None)
+            user = User.objects.create_user(
+                username=username,
+                password=password,
+                email=email,
+                first_name=first_name,
+                last_name=last_name
+            )
+            return redirect(reverse('main:login_page'))
+        except Exception as exc:
+            print("При создании пользователя произошла ошибка", request.POST, exc)
+            error = {
+                'error_code': exc,
+                'message': 'Проверьте корректность введенных данных'
+            }
+            return render(request, 'main/register.html', {"error": error})
+
+    # Возвратить страницу регистрации при GET запросе
+    return render(request, 'main/register.html', {})
+
+
+def login_page(request):
+    '''
+        Контроллер, отвечающий за логику:
+        - отображения страницы логина
+        - аутентификации пользователя
+    '''
+    if request.method == "GET":
+        return render(request, "main/login.html", {})
+    #if request.method == "POST":
+    else:
+        # Аутентификация пользователя при POST запросе
+        username = request.POST.get("login", None)
+        password = request.POST.get("password", None)
+        user = authenticate(request, username=username, password=password)
+
+        # Если пользователь существует и данные верны: перенаправить в страницу профиля
+        if user:
+            login(request, user)
+            return redirect(reverse("main:profile_page"))
+
+        # Если данные неверны: возвратить сообщение о некорректных данных
+        return render(request, "main/login.html", {"error": "Неправильный логин или пароль"})
+    # else:
+    # # Возвратить страницу логина при GET запросе
+    #     return render(request, "main/login.html", {})
+
+
+def logout_view(request):
+    '''
+        Контроллер, отвечающий за логику:
+        - выхода из аккаунта
+    '''
+    logout(request)
+    return redirect(reverse('main:home_page'))
+
+
 def results_page(request):
+    '''
+        Контроллер, отвечающий за логику:
+        - поискового запроса
+    '''
     search_pattern = request.GET.get("search", None)
+
+    # Если поисковой запрос не пустой, то найти подходящие продукты
     if search_pattern and len(search_pattern) > 0:
         all_foods = models.Foods.objects.filter(name__icontains=search_pattern[0])
     else:
+        # В ином случае вывести все продукты
         all_foods = models.Foods.objects.all()
 
     context = {
         'all_foods': all_foods,
     }
-
     return render(request, 'main/foods.html', context)
 
 
 def food_detail_page(request, pk):
+    '''
+        Контроллер, отвечающий за логику:
+        - отображения страницы продукта
+        - возможность заказа клиентами продуктов
+    '''
     food = models.Foods.objects.get(pk=pk)
-
     food_price = food.price
-    print(food_price)
 
     comments = models.Comment.objects.filter(food=food)
 
-    if request.method == "GET":
-        return render(request, 'main/food_detail.html', {'food':food, 'comments':comments})
-    else:
+    if request.method == "POST":
+        # Добавление заказа при POST заросе
         f_name = request.POST.get("first_name")
         l_name = request.POST.get("last_name")
         p_number = request.POST.get("phone_number")
         address = request.POST.get("address")
         f_count = request.POST.get("food_count")
-        print(food_price * int(f_count))
+
         models.Orders.objects.create(
             food=food,
             first_name=f_name,
@@ -80,23 +136,27 @@ def food_detail_page(request, pk):
             phone_number=p_number,
             address=address,
             food_count=f_count,
-            price=food_price * int(f_count)
+            price=food_price * int(f_count)  # Вычисляем цену заказа в зависимости от количества заказанного продукта
         )
-        # author = request.POST.get("author", None)
-        # comment_text = request.POST.get("comment", None)
-        # models.Comment.objects.create(
-        #     author=author,
-        #     comment_text=comment_text,
-        #     food=food,
-        # )
         return redirect(reverse('main:food_detail_page', args=(pk,)))
 
+    # возвратить страницу продукта при GET запросе
+    return render(request, 'main/food_detail.html', {'food': food, 'comments': comments})
 
-def add_comment_view(request,pk):
+
+def add_comment_view(request, pk):
+    '''
+        Контроллер, отвечающий за логику:
+        - комментирования продуктов
+    '''
+
     if request.user.is_authenticated:
+        # Если пользователь аутентифицирован: использовать его имя пользователя
         author = request.user.username
     else:
+        # В ином случае: использовать переданное имя
         author = request.POST.get("author", None)
+
     food = models.Foods.objects.get(pk=pk)
     comment_text = request.POST.get("comment", None)
     models.Comment.objects.create(
@@ -104,6 +164,7 @@ def add_comment_view(request,pk):
         comment_text=comment_text,
         food=food,
     )
+    # перенаправить на страницу продукта
     return redirect(reverse('main:food_detail_page', args=(pk,)))
 
 
@@ -143,41 +204,17 @@ def profile_page(request):
 
         # возвратить страницу профиля при GET запросе
         return render(request, 'main/profile.html', {})
+    # если пользователь не аутентифицирован: перенаправить на страницу логина
     return redirect(reverse("main:login_page"))
 
 
-def logout_view(request):
-    logout(request)
-    return redirect(reverse('main:home_page'))
-
-
-def register_page(request):
-    if request.method == "POST":
-        try:
-            username = request.POST.get("login", None)
-            password = request.POST.get("password", None)
-            email = request.POST.get("email", None)
-            first_name = request.POST.get("first_name", None)
-            last_name = request.POST.get("last_name", None)
-            user = User.objects.create_user(
-                username=username,
-                password=password,
-                email=email,
-                first_name=first_name,
-                last_name=last_name
-            )
-            return redirect(reverse('main:login_page'))
-        except Exception as exc:
-            print("При создании пользователя произошла ошибка", request.POST, exc)
-            error = {
-                'error_code': exc,
-                'message': 'Проверьте корректность введенных данных'
-            }
-            return render(request, 'main/register.html', {"error": error})
-
-    return render(request, 'main/register.html', {})
-
 def profile_delete_view(request):
+    """
+        Контроллер, отвечающий за логику:
+        - удаления пользователя
+    """
+
+    # Если пользователь аутентифицирован: удалить пользователя
     if request.user.is_authenticated:
         try:
             user = request.user
@@ -185,16 +222,21 @@ def profile_delete_view(request):
             return redirect(reverse('main:home_page'))
         except Exception as exc:
             print(f"при удалении пользователя {request.user.pk} произошла ошибка", exc)
+
         return redirect(reverse('main:profile_page'))
 
-    # Если пользователь не аутентифицирован, перенаправить на страницу логина
+    # Если пользователь не аутентифицирован: перенаправить на страницу логина
     return redirect(reverse('main:login_page'))
 
 
 def contact_us_page(request):
-    if request.method == "GET":
-        return render(request, 'main/contact_us.html', {})
-    else:
+    """
+        Контроллер, отвечающий за логику:
+        - связь пользователя с тех. поддержкой
+    """
+
+    # отправка сообщения в тех. поддержку при POST запросе
+    if request.method == "POST":
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
         phone_number = request.POST.get("phone_number")
@@ -209,15 +251,18 @@ def contact_us_page(request):
         )
         return redirect(reverse('main:contact_us_page'))
 
-
-def history_page(request):
-    return render(request, 'main/history.html', {})
+    # возвратить страницу связи с тех. поддержкой при GET запросе
+    return render(request, 'main/contact_us.html', {})
 
 
 def career_page(request):
-    if request.method == "GET":
-        return render(request, 'main/career.html', {})
-    else:
+    """
+        Контроллер, отвечающий за логику:
+        - связь пользователя с тех. поддержкой
+    """
+
+    # отправка заявки на трудоустройство при POST запросе
+    if request.method == "POST":
         full_name = request.POST.get("full_name")
         email = request.POST.get("email")
         stuff = request.POST.get("stuff")
@@ -230,6 +275,15 @@ def career_page(request):
         )
         return redirect(reverse('main:career_page'))
 
+    # возвратить страницу карьеры при GET запросе
+    return render(request, 'main/career.html', {})
 
+
+# Отображение бизнес страницы
 def business_page(request):
     return render(request, 'main/business.html', {})
+
+
+# Отображение страницы истории
+def history_page(request):
+    return render(request, 'main/history.html', {})

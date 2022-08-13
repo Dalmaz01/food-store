@@ -1,6 +1,7 @@
 from django.db import models
 
 
+# Категория продукта
 class Category(models.Model):
     name = models.CharField(max_length=50, verbose_name='Категория')
 
@@ -8,9 +9,7 @@ class Category(models.Model):
         return self.name
 
 
-
-
-
+# Сам продукт
 class Foods(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название еды')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -22,6 +21,7 @@ class Foods(models.Model):
         return self.name
 
 
+# Комментарии
 class Comment(models.Model):
     author = models.CharField(max_length=30, verbose_name='Автор комментария')
     comment_text = models.TextField(verbose_name='Текст комментария')
@@ -32,6 +32,7 @@ class Comment(models.Model):
         return f"{self.author}: {self.created_date} - {self.food}"
 
 
+# Заказы по которым операторы выполняют
 class Orders(models.Model):
     food = models.ForeignKey(Foods, on_delete=models.CASCADE, default=None, null=None)
     first_name = models.CharField(max_length=30, verbose_name='Имя')
@@ -46,6 +47,7 @@ class Orders(models.Model):
         return f"{self.food}: {self.first_name} {self.last_name} - {self.date}"
 
 
+# Вопросы клиентов к тех. поддержке
 class Questions(models.Model):
     first_name = models.CharField(max_length=30, verbose_name='Имя')
     last_name = models.CharField(max_length=30, verbose_name='Фамилия')
@@ -58,6 +60,7 @@ class Questions(models.Model):
         return f"{self.first_name}: {self.message}"
 
 
+# Заявки на трудоустроение
 class Career(models.Model):
     full_name = models.CharField(max_length=100, verbose_name='ФИО')
     email = models.CharField(max_length=100, verbose_name='Адрес эл. почты')
