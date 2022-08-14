@@ -9,6 +9,8 @@ class Category(models.Model):
         return self.name
 
 
+
+
 # Сам продукт
 class Foods(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название еды')
@@ -19,6 +21,21 @@ class Foods(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class RatingStar(models.Model):
+    number = models.IntegerField(verbose_name='Номер звезды', default=0)
+
+    def __str__(self):
+        return f'{self.number}'
+
+
+class Rating(models.Model):
+    star = models.IntegerField(verbose_name='звезда')
+    food = models.ForeignKey(Foods, on_delete=models.CASCADE, verbose_name='еда')
+
+    def __str__(self):
+        return f"{self.food} - {self.star}"
 
 
 # Комментарии

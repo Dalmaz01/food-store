@@ -5,7 +5,8 @@ from .models import(
     Comment,
     Orders,
     Questions,
-    Career
+    Career,
+    Rating
 )
 
 admin.site.register(Category)
@@ -14,3 +15,4 @@ admin.site.register(Comment)
 admin.site.register(Orders)
 admin.site.register(Questions)
 admin.site.register(Career)
+admin.site.register(Rating)

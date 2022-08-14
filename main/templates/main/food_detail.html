@@ -24,10 +24,29 @@
                 <input type="text" placeholder="Адрес" name="address" class="form-control w-50">
                 <input type="number" name="food_count" placeholder="кол-во" class="form-control w-50">
                 <input type="submit" value="Заказать" class="btn btn-primary">
-            </form>
 
+                {% if error %}
+                    <p class="text-danger">{{ error.message }}</p>
+                {% endif %}
+            </form>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <form method="post" action="{% url 'main:add_rate' food.pk %}">
+                {% csrf_token %}
+                <h4>Оцените наш продукт!</h4>
+                <p><input type="radio" name="rate" value="1">1 звезда</p>
+                <p><input type="radio" name="rate" value="2">2 звезды</p>
+                <p><input type="radio" name="rate" value="3">3 звезды</p>
+                <p><input type="radio" name="rate" value="4">4 звезды</p>
+                <p><input type="radio" name="rate" value="5">5 звезд</p>
+                <p><input type="submit" value="Отправить"></p>
+            </form>
+        </div>
+    </div>
+
 
     <h3>Комментарии:</h3>
     <div class="row">

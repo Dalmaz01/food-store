@@ -13,9 +13,11 @@ def home_page(request):
 # Отображение страницы со всеми продуктами
 def foods_page(request):
     all_foods = models.Foods.objects.all()
+    rating = models.Rating.objects.all()
 
     context = {
         'all_foods': all_foods,
+        'rating': rating,
     }
     return render(request, 'main/foods.html', context)
 
@@ -122,23 +124,31 @@ def food_detail_page(request, pk):
     comments = models.Comment.objects.filter(food=food)
 
     if request.method == "POST":
-        # Добавление заказа при POST заросе
-        f_name = request.POST.get("first_name")
-        l_name = request.POST.get("last_name")
-        p_number = request.POST.get("phone_number")
-        address = request.POST.get("address")
-        f_count = request.POST.get("food_count")
+        try:
+            # Добавление заказа при POST заросе
+            f_name = request.POST.get("first_name")
+            l_name = request.POST.get("last_name")
+            p_number = request.POST.get("phone_number")
+            address = request.POST.get("address")
+            f_count = request.POST.get("food_count")
 
-        models.Orders.objects.create(
-            food=food,
-            first_name=f_name,
-            last_name=l_name,
-            phone_number=p_number,
-            address=address,
-            food_count=f_count,
-            price=food_price * int(f_count)  # Вычисляем цену заказа в зависимости от количества заказанного продукта
-        )
-        return redirect(reverse('main:food_detail_page', args=(pk,)))
+            models.Orders.objects.create(
+                food=food,
+                first_name=f_name,
+                last_name=l_name,
+                phone_number=p_number,
+                address=address,
+                food_count=f_count,
+                price=food_price * int(f_count)  # Вычисляем цену заказа в зависимости от количества заказанного продукта
+            )
+            return redirect(reverse('main:food_detail_page', args=(pk,)))
+        except Exception as exc:
+            print("При создании пользователя произошла ошибка", request.POST, exc)
+            error = {
+                'error_code': exc,
+                'message': 'Проверьте корректность введенных данных'
+            }
+            return render(request, 'main/food_detail.html', {"error": error, 'food': food, 'comments': comments})
 
     # возвратить страницу продукта при GET запросе
     return render(request, 'main/food_detail.html', {'food': food, 'comments': comments})
@@ -287,3 +297,22 @@ def business_page(request):
 # Отображение страницы истории
 def history_page(request):
     return render(request, 'main/history.html', {})
+
+
+def add_rate_view(request, pk):
+    food = models.Foods.objects.get(pk=pk)
+    star = request.POST.get('rate')
+    rate = models.Rating.objects.get(food=food)
+
+    if models.Rating.objects.get(food=food):
+        rate.food = food
+        rate.star = star
+
+        rate.save()
+    else:
+        models.Rating.objects.create(
+            food=food,
+            star=star
+        )
+
+    return redirect(reverse('main:food_detail_page', args=(pk,)))
