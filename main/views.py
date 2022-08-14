@@ -302,14 +302,16 @@ def history_page(request):
 def add_rate_view(request, pk):
     food = models.Foods.objects.get(pk=pk)
     star = request.POST.get('rate')
-    rate = models.Rating.objects.get(food=food)
 
-    if models.Rating.objects.get(food=food):
-        rate.food = food
-        rate.star = star
+    try:
+        if models.Rating.objects.get(food=food):
+            rate = models.Rating.objects.get(food=food)
+            rate.food = food
+            rate.star = star
 
-        rate.save()
-    else:
+            rate.save()
+    except Exception as exc:
+
         models.Rating.objects.create(
             food=food,
             star=star
