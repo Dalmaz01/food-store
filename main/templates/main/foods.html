@@ -45,16 +45,18 @@
                                     <h3 class="mb-0 font-weight-semibold">{{ food.price }}тг</h3>
 
                                     <div>
-                                        {% for rate in rating %}
-                                            {% if rate.food == food %}
+                                        {% if rating %}
+                                            {% for rate in rating %}
+                                                {% if rate.food == food %}
 
-                                                {% with ''|center:rate.star as range %}
-                                                    {% for _ in range %}
-                                                        <i class="fa fa-star"></i>
-                                                    {% endfor %}
-                                                {% endwith %}
-                                            {% endif %}
-                                        {% endfor %}
+                                                    {% with ''|center:rate.star as range %}
+                                                        {% for _ in range %}
+                                                            <i class="fa fa-star"></i>
+                                                        {% endfor %}
+                                                    {% endwith %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
 
                                     </div>
 
