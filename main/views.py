@@ -300,10 +300,17 @@ def history_page(request):
 
 
 def add_rate_view(request, pk):
+    """
+        Контроллер, отвечающий за логику:
+        - добавления рейтинга
+        - замены рейтинга
+        Отображается последний добавленный рейтинг
+    """
     food = models.Foods.objects.get(pk=pk)
     star = request.POST.get('rate')
 
     try:
+        # если рейтинг уже имеется, то заменить его на текущий
         if models.Rating.objects.get(food=food):
             rate = models.Rating.objects.get(food=food)
             rate.food = food
@@ -311,7 +318,7 @@ def add_rate_view(request, pk):
 
             rate.save()
     except Exception as exc:
-
+        # если не имеется, то создать новый
         models.Rating.objects.create(
             food=food,
             star=star
