@@ -82,9 +82,8 @@ class Career(models.Model):
     full_name = models.CharField(max_length=100, verbose_name='ФИО')
     email = models.CharField(max_length=100, verbose_name='Адрес эл. почты')
     stuff = models.CharField(max_length=100, verbose_name='Желаемая должность')
-    resume = models.FileField(upload_to='MEDIA_ROOT', verbose_name='Резюме')
     message = models.TextField(verbose_name='Сопроводительное письмо')
     date = models.DateTimeField(auto_now_add=True, verbose_name='Дата отправки')
 
     def __str__(self):
-        return f"{self.full_name}: {self.resume}"
+        return f"{self.full_name}: {self.stuff}"
