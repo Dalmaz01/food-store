@@ -307,7 +307,7 @@ def add_rate_view(request, pk):
         Отображается последний добавленный рейтинг
     """
     food = models.Foods.objects.get(pk=pk)
-    star = request.POST.get('rate')
+    star = request.POST.get('rate', None)
 
     try:
         # если рейтинг уже имеется, то заменить его на текущий
@@ -317,11 +317,15 @@ def add_rate_view(request, pk):
             rate.star = star
 
             rate.save()
+
     except Exception as exc:
         # если не имеется, то создать новый
-        models.Rating.objects.create(
-            food=food,
-            star=star
-        )
+        try:
+            models.Rating.objects.create(
+                food=food,
+                star=star
+            )
+        except Exception:
+            return redirect(reverse('main:food_detail_page', args=(pk,)))
 
     return redirect(reverse('main:food_detail_page', args=(pk,)))
