@@ -5,10 +5,14 @@
 
 {% block link %}
 <link rel="stylesheet" href="{% static 'main/food_detail.css' %}">
+<link rel="stylesheet" href="{% static 'main/rate_style.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
 {% endblock %}
 
 {% block body %}
-    <div class="row">
+    <div class="row" style="align-items: center;">
         <div class="col-sm-6">
             <img src="{{MEDIA_URL}}{{ food.image }}" style="width: 100%;">
         </div>
@@ -18,8 +22,11 @@
             <h2>{{ food.price }} Тг.</h2>
             <form method="post" name="order">
                 {% csrf_token %}
-                <input type="text" placeholder="Имя" name="first_name" class="form-control w-50">
-                <input type="text" placeholder="Фамилия" name="last_name" class="form-control w-50">
+                {% if not user.is_authenticated %}
+                    <input type="text" placeholder="Имя" name="first_name" class="form-control w-50">
+                    <input type="text" placeholder="Фамилия" name="last_name" class="form-control w-50">
+                {% endif %}
+
                 <input type="text" placeholder="Номер телефона" name="phone_number" class="form-control w-50">
                 <input type="text" placeholder="Адрес" name="address" class="form-control w-50">
                 <input type="number" name="food_count" placeholder="кол-во" class="form-control w-50">
@@ -32,17 +39,19 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row rate">
         <div class="col-sm-12">
             <form method="post" action="{% url 'main:add_rate' food.pk %}">
                 {% csrf_token %}
-                <h4>Оцените наш продукт!</h4>
-                <p><input type="radio" name="rate" value="1">1 звезда</p>
-                <p><input type="radio" name="rate" value="2">2 звезды</p>
-                <p><input type="radio" name="rate" value="3">3 звезды</p>
-                <p><input type="radio" name="rate" value="4">4 звезды</p>
-                <p><input type="radio" name="rate" value="5">5 звезд</p>
-                <p><input type="submit" value="Отправить"></p>
+                <h4 class="rate">Оцените наш продукт!</h4>
+                <div class="rating">
+                  <input type="radio" name="rate" value="5" id="5"><label for="5">☆</label>
+                  <input type="radio" name="rate" value="4" id="4"><label for="4">☆</label>
+                  <input type="radio" name="rate" value="3" id="3"><label for="3">☆</label>
+                  <input type="radio" name="rate" value="2" id="2"><label for="2">☆</label>
+                  <input type="radio" name="rate" value="1" id="1"><label for="1">☆</label>
+                </div>
+                <p class="rate"><input type="submit" value="Отправить" class="btn btn-primary"></p>
             </form>
         </div>
     </div>
@@ -54,12 +63,12 @@
             <form method="post" action="{% url 'main:add_comment' food.pk %}">
                 {% csrf_token %}
                 {% if user.is_authenticated %}
-                <input type="text" name="comment" placeholder="Текст комментария">
+                <input type="text" name="comment" placeholder="Текст комментария" class="form-control w-25">
                 {% else %}
-                <input type="text" name="author" placeholder="Автор">
-                <input type="text" name="comment" placeholder="Текст комментария">
+                <input type="text" name="author" placeholder="Автор" class="form-control w-25">
+                <input type="text" name="comment" placeholder="Текст комментария" class="form-control w-25">
                 {% endif %}
-                <input type="submit" value="Отправить комментарий">
+                <input type="submit" value="Отправить комментарий" class="btn btn-primary">
             </form>
         </div>
     </div>
@@ -68,11 +77,14 @@
         <div class="col-sm-12">
             <ul>
                 {% for comment in comments %}
-                    <li style="color: black;">{{comment.author}}: {{comment.created_date}}<br>
+                    <li style="color: black;"><strong>{{comment.author}}</strong>: {{comment.created_date}}<br>
                     {{comment.comment_text}}</li>
                 {% endfor %}
             </ul>
         </div>
     </div>
+
+
+
 
 {% endblock %}

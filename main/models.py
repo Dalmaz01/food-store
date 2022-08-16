@@ -59,9 +59,10 @@ class Orders(models.Model):
     food_count = models.IntegerField(verbose_name='Кол-во', default=None, null=None)
     price = models.IntegerField(verbose_name='Сумма', default=None, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True, verbose_name='Время заказа', null=None)
+    time = models.TimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.food}: {self.first_name} {self.last_name} - {self.date}"
+        return f"{self.food}: {self.first_name} {self.last_name} - {self.time}"
 
 
 # Вопросы клиентов к тех. поддержке

@@ -125,11 +125,17 @@ def food_detail_page(request, pk):
 
     comments = models.Comment.objects.filter(food=food)
 
+
+
     if request.method == "POST":
         try:
             # Добавление заказа при POST заросе
-            f_name = request.POST.get("first_name")
-            l_name = request.POST.get("last_name")
+            if request.user.is_authenticated:
+                f_name = request.user.first_name
+                l_name = request.user.last_name
+            else:
+                f_name = request.POST.get("first_name")
+                l_name = request.POST.get("last_name")
             p_number = request.POST.get("phone_number")
             address = request.POST.get("address")
             f_count = request.POST.get("food_count")
