@@ -19,4 +19,5 @@ urlpatterns = [
     path('business', views.business_page, name='business_page'),
     path('add_comment/<int:pk>', views.add_comment_view, name='add_comment'),
     path('add_rate/<int:pk>', views.add_rate_view, name='add_rate'),
+    path('category/<int:pk>', views.category_view, name='category_view'),
 ]

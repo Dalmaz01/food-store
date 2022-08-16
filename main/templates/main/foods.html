@@ -33,7 +33,7 @@
                                     </h6>
 
                                     <ul class="list-inline list-inline-dotted mb-3 mb-lg-2">
-                                        <li class="list-inline-item">{{ food.category }}</li>
+                                        <a href="{% url 'main:category_view' food.pk %}"><li class="list-inline-item">{{ food.category }}</li></a>
                                     </ul>
 
                                     <p class="mb-3">{{ food.description }} </p>

@@ -14,10 +14,12 @@ def home_page(request):
 def foods_page(request):
     all_foods = models.Foods.objects.all()
     rating = models.Rating.objects.all()
+    category = models.Category.objects.all()
 
     context = {
         'all_foods': all_foods,
         'rating': rating,
+        'category': category
     }
     return render(request, 'main/foods.html', context)
 
@@ -329,3 +331,15 @@ def add_rate_view(request, pk):
             return redirect(reverse('main:food_detail_page', args=(pk,)))
 
     return redirect(reverse('main:food_detail_page', args=(pk,)))
+
+
+def category_view(request, pk):
+    food = models.Foods.objects.get(pk=pk)
+
+    # Если поисковой запрос не пустой, то найти подходящие продукты
+    all_foods = models.Foods.objects.filter(category=food.category)
+
+    context = {
+        'all_foods': all_foods,
+    }
+    return render(request, 'main/foods.html', context)
