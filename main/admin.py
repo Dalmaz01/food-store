@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import(
     Category,
     Foods,
@@ -6,7 +7,7 @@ from .models import(
     Orders,
     Questions,
     Career,
-    Rating
+    Rating,
 )
 
 admin.site.register(Category)

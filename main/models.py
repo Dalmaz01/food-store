@@ -9,9 +9,7 @@ class Category(models.Model):
         return self.name
 
 
-
-
-# Сам продукт
+#Продукт
 class Foods(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название еды')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

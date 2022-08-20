@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+
 from . import models
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
@@ -340,6 +342,11 @@ def add_rate_view(request, pk):
 
 
 def category_view(request, pk):
+    """
+        Контроллер, отвечающий за логику:
+        - поиск и отображение продуктов по категории
+        Отображается последний добавленный рейтинг
+    """
     food = models.Foods.objects.get(pk=pk)
 
     # Если поисковой запрос не пустой, то найти подходящие продукты
